@@ -6,8 +6,8 @@ Type=forking
 PIDFile=/var/run/loom.pid
 WorkingDirectory={{ project_dir }}
 
-User={{ loom_user }}
-Group={{ loom_user }}
+User=root
+Group=root
 
 ExecStart={{ project_dir }}/loom.sh start
 ExecStop={{ project_dir }}/loom.sh stop
