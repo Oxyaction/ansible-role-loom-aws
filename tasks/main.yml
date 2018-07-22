@@ -1,0 +1,53 @@
+---
+
+- name: Download loom
+  get_url:
+    url: https://private.delegatecall.com/loom/linux/{{ loom_version }}/loom
+    dest: "{{ loom_executable }}"
+    mode: +x
+
+- name: Create project directory
+  become: yes
+  become_user: "{{ loom_user }}"
+  file:
+    path: "{{ project_dir }}"
+    state: directory
+
+- name: Init loom blockchain
+  become: yes
+  become_user: "{{ loom_user }}"
+  command: "{{ loom_executable }} init"
+  args:
+    chdir: "{{ project_dir }}"
+    creates: "{{ project_dir }}/chaindata"
+
+- name: Copy genesis file
+  become: yes
+  become_user: "{{ loom_user }}"
+  copy:
+    src: "{{ genesis_file }}"
+    dest: "{{ project_dir }}/genesis.json"
+
+- name: Copy control script
+  become: yes
+  become_user: "{{ loom_user }}"
+  template:
+    src: loom.sh.j2
+    dest: "{{ project_dir }}/loom.sh"
+    mode: +x
+
+- name: Copy systemd unit script
+  template:
+    src: loom.service.j2
+    dest: /etc/systemd/system/loom.service
+    mode: +x
+  notify:
+    - reload systemd
+
+- name: Start loom
+  service:
+    name: loom
+    state: started
+    enabled: "{{ start_loom_on_boot }}"
+
+

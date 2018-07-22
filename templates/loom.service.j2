@@ -1,0 +1,18 @@
+[Unit]
+Description=Loom blockchain
+
+[Service]
+Type=forking
+PIDFile=/var/run/loom.pid
+WorkingDirectory={{ project_dir }}
+
+User={{ loom_user }}
+Group={{ loom_user }}
+
+ExecStart={{ project_dir }}/loom.sh start
+ExecStop={{ project_dir }}/loom.sh stop
+ExecReload={{ project_dir }}/loom.sh restart
+TimeoutSec=3000
+
+[Install]
+WantedBy=multi-user.target
