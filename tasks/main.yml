@@ -28,6 +28,13 @@
     src: "{{ genesis_file }}"
     dest: "{{ project_dir }}/genesis.json"
 
+- name: Copy config file
+  become: yes
+  become_user: "{{ loom_user }}"
+  template:
+    src: loom.yml.j2
+    dest: "{{ project_dir }}/loom.yml"
+
 - name: Copy control script
   become: yes
   become_user: "{{ loom_user }}"

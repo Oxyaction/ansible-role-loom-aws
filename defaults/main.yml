@@ -6,3 +6,4 @@ loom_user: ec2-user
 project_dir: /home/{{ loom_user }}/loom
 genesis_file: genesis.json
 start_loom_on_boot: yes
+query_port: 9999
